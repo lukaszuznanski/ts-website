@@ -1,26 +1,26 @@
-imperiumgracza-php:
+imperiumgracza.pl-php:
   build: .
   restart: always
-  dockerfile: php/5-fpm/Dockerfile
-  container_name: imperiumgracza-php5-fpm
+  dockerfile: php/7-fpm/Dockerfile
+  container_name: imperiumgracza-php7-fpm
   volumes:
     - .:/var/www/imperiumgracza
   ports:
    - "19018:9000"
-imperiumgracza-php-2:
+imperiumgracza.pl-php-2:
   build: .
   restart: always
-  dockerfile: php/5-fpm/Dockerfile
-  container_name: imperiumgracza-php5-fpm-2
+  dockerfile: php/7-fpm/Dockerfile
+  container_name: imperiumgracza-php7-fpm-2
   volumes:
     - .:/var/www/imperiumgracza
   ports:
    - "19019:9000"
-imperiumgracza-php-3:
+imperiumgracza.pl-php-3:
   build: .
   restart: always
-  dockerfile: php/5-fpm/Dockerfile
-  container_name: imperiumgracza-php5-fpm-3
+  dockerfile: php/7-fpm/Dockerfile
+  container_name: imperiumgracza-php7-fpm-3
   volumes:
     - .:/var/www/imperiumgracza
   ports:
