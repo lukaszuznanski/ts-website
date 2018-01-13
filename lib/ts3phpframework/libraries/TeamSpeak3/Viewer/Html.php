@@ -414,11 +414,7 @@ class TeamSpeak3_Viewer_Html implements TeamSpeak3_Viewer_Interface
       {
         if(!isset($this->cacheIcon[$this->currObj["virtualserver_icon_id"]]))
         {
-          try {
-            $download = $this->currObj->transferInitDownload(rand(0x0000, 0xFFFF), 0, $this->currObj->iconGetName("virtualserver_icon_id"));
-          } catch(TeamSpeak3_Exception $e) {
-            return;
-          }
+          $download = $this->currObj->transferInitDownload(rand(0x0000, 0xFFFF), 0, $this->currObj->iconGetName("virtualserver_icon_id"));
 
           if($this->ftclient == "data:image")
           {
@@ -488,11 +484,7 @@ class TeamSpeak3_Viewer_Html implements TeamSpeak3_Viewer_Interface
       {
         if(!isset($this->cacheIcon[$this->currObj["channel_icon_id"]]))
         {
-          try {
-            $download = $this->currObj->getParent()->transferInitDownload(rand(0x0000, 0xFFFF), 0, $this->currObj->iconGetName("channel_icon_id"));
-          } catch(TeamSpeak3_Exception $e) {
-            return;
-          }
+          $download = $this->currObj->getParent()->transferInitDownload(rand(0x0000, 0xFFFF), 0, $this->currObj->iconGetName("channel_icon_id"));
 
           if($this->ftclient == "data:image")
           {
@@ -556,7 +548,25 @@ class TeamSpeak3_Viewer_Html implements TeamSpeak3_Viewer_Interface
       }
     }
 
-    foreach($this->currObj->memberOf() as $group)
+    // Get current groups the client is a member of.
+    // Shift off first group (channel group), leaving only server groups.
+    $groups = $this->currObj->memberOf();
+    $clientGroups = [$groups[0]];
+    unset($groups[0]);
+
+    // Create temp assoc array to use in custom uasort function.
+    $sgroups = [];
+    foreach($groups as $group) {
+      $sgroups[$group['sgid']] = $group;
+    }
+    // Use same server group sort function from TeamSpeak3_Node_Server class.
+    uasort($sgroups, array(get_class($this->currObj->getParent()), "sortGroupList"));
+
+    // Append first group (channel group), convert to non-assoc array.
+    $clientGroups = array_merge($clientGroups, array_values($sgroups));
+    unset($sgroups); // Clean-up temp sorting array.
+
+    foreach($clientGroups as $group)
     {
       if(!$group["iconid"]) continue;
 
@@ -566,11 +576,7 @@ class TeamSpeak3_Viewer_Html implements TeamSpeak3_Viewer_Interface
       {
         if(!isset($this->cacheIcon[$group["iconid"]]))
         {
-          try {
-            $download = $group->getParent()->transferInitDownload(rand(0x0000, 0xFFFF), 0, $group->iconGetName("iconid"));
-          } catch(TeamSpeak3_Exception $e) {
-            return;
-          }
+          $download = $group->getParent()->transferInitDownload(rand(0x0000, 0xFFFF), 0, $group->iconGetName("iconid"));
 
           if($this->ftclient == "data:image")
           {
@@ -605,11 +611,7 @@ class TeamSpeak3_Viewer_Html implements TeamSpeak3_Viewer_Interface
       {
         if(!isset($this->cacheIcon[$this->currObj["client_icon_id"]]))
         {
-          try {
-            $download = $this->currObj->getParent()->transferInitDownload(rand(0x0000, 0xFFFF), 0, $this->currObj->iconGetName("client_icon_id"));
-          } catch(TeamSpeak3_Exception $e) {
-            return;
-          }
+          $download = $this->currObj->getParent()->transferInitDownload(rand(0x0000, 0xFFFF), 0, $this->currObj->iconGetName("client_icon_id"));
 
           if($this->ftclient == "data:image")
           {
