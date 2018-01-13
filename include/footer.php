@@ -9,7 +9,6 @@
             <hr>
             <p class="pull-left" id="website-copyright">&copy; <?php tl($config["general"]["title"]); ?></p>
             <div class="pull-right">
-              
             </div>
         </div>
     </div>
